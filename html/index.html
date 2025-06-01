@@ -34,11 +34,7 @@
                     <span class=""><i class="fa-solid fa-puzzle-piece mt-1" style="font-size: 20px;"></i></span>
                     <span class="fs-6">Quản lí thể loại</span>
                 </div>
-                <div class="item_sidebar d-flex align-items-center gap-3 px-5 py-3"
-                    onclick="loadPage('quanLiDanhMuc.html')">
-                    <span class=""><i class="fa-solid fa-box-archive mt-1" style="font-size: 20px;"></i></span>
-                    <span class="fs-6">Quản lí danh mục</span>
-                </div>
+                
                 <div class="item_sidebar d-flex align-items-center gap-3 px-5 py-3"
                     onclick="loadPage('quanLiPhim.html')">
                     <span class=""><i class="fa-solid fa-clapperboard mt-1" style="font-size: 20px;"></i></span>
@@ -75,11 +71,11 @@
     <script>
         function loadPage(page) {
             const contentDiv = document.querySelector('.content');
-            contentDiv.innerHTML = `<iframe src="${page}" style="width:100%; height:100vh; border:none;" ></iframe>`;
+            contentDiv.innerHTML = `<iframe src="${page}" style="width:100%; border:none;" ></iframe>`;
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            loadPage('thongke.html');  // load trang mặc định lúc đầu
+            loadPage('quanLiPhim.html');  // load trang mặc định lúc đầu
         });
     </script>
 

@@ -1,11 +1,212 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quản lý phim</title>
+  <link rel="stylesheet" href="../bootstrap-5.3.6-dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../fontawesome-free-6.7.2-web/css/all.min.css" />
 </head>
 <body>
-    Quản lí Phim
+  <div class="container py-4">
+    <h4 class="fw-bold mb-4">Quản lý phim</h4>
+
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addMovieModal">
+      <i class="fa-solid fa-plus"></i> Thêm phim
+    </button>
+
+    <table class="table table-bordered align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Tên phim</th>
+          <th>Thể loại</th>
+          <th>Năm</th>
+          <th>Thời lượng</th>
+          <th>Trạng thái</th>
+          <th>Chức năng</th>
+        </tr>
+      </thead>
+      <tbody id="movieTableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Modal Thêm / Sửa phim -->
+  <div class="modal fade" id="addMovieModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">Thêm phim</h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input id="movieName" class="form-control mb-2" placeholder="Tên phim" />
+          <textarea id="movieDesc" class="form-control mb-2" placeholder="Mô tả"></textarea>
+          <input id="movieYear" type="number" class="form-control mb-2" placeholder="Năm phát hành" />
+          <input id="movieDuration" type="number" class="form-control mb-2" placeholder="Thời lượng (phút)" />
+          <select id="movieGenre" class="form-control mb-2">
+            <option value="">-- Chọn thể loại --</option>
+            <option>Hành động</option>
+            <option>Hài</option>
+            <option>Kinh dị</option>
+            <option>Hoạt hình</option>
+            <option>Tình cảm</option>
+          </select>
+          <select id="movieStatus" class="form-control mb-2">
+            <option value="">-- Trạng thái --</option>
+            <option>Đang chiếu</option>
+            <option>Đã chiếu</option>
+            <option>Sắp chiếu</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          <button class="btn btn-primary" id="saveMovieBtn">Lưu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Xem chi tiết -->
+  <div class="modal fade" id="viewMovieModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Chi tiết phim</h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Tên phim:</strong> <span id="viewName"></span></p>
+          <p><strong>Mô tả:</strong> <span id="viewDesc"></span></p>
+          <p><strong>Năm phát hành:</strong> <span id="viewYear"></span></p>
+          <p><strong>Thời lượng:</strong> <span id="viewDuration"></span> phút</p>
+          <p><strong>Thể loại:</strong> <span id="viewGenre"></span></p>
+          <p><strong>Trạng thái:</strong> <span id="viewStatus"></span></p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../bootstrap-5.3.6-dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let movies = [];
+    let editIndex = -1;
+
+    const movieTableBody = document.getElementById("movieTableBody");
+    const modalTitle = document.getElementById("modalTitle");
+    const movieName = document.getElementById("movieName");
+    const movieDesc = document.getElementById("movieDesc");
+    const movieYear = document.getElementById("movieYear");
+    const movieDuration = document.getElementById("movieDuration");
+    const movieGenre = document.getElementById("movieGenre");
+    const movieStatus = document.getElementById("movieStatus");
+    const saveMovieBtn = document.getElementById("saveMovieBtn");
+
+    const addMovieModal = new bootstrap.Modal(document.getElementById("addMovieModal"));
+    const viewMovieModal = new bootstrap.Modal(document.getElementById("viewMovieModal"));
+
+    const viewName = document.getElementById("viewName");
+    const viewDesc = document.getElementById("viewDesc");
+    const viewYear = document.getElementById("viewYear");
+    const viewDuration = document.getElementById("viewDuration");
+    const viewGenre = document.getElementById("viewGenre");
+    const viewStatus = document.getElementById("viewStatus");
+
+    function renderMovies() {
+      movieTableBody.innerHTML = movies.map((m, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${m.name}</td>
+          <td>${m.genre}</td>
+          <td>${m.year}</td>
+          <td>${m.duration} phút</td>
+          <td>${m.status}</td>
+          <td>
+            <button class="btn btn-info btn-sm me-1" onclick="viewMovie(${i})">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+            <button class="btn btn-warning btn-sm me-1" onclick="editMovie(${i})">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="deleteMovie(${i})">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function resetForm() {
+      movieName.value = "";
+      movieDesc.value = "";
+      movieYear.value = "";
+      movieDuration.value = "";
+      movieGenre.value = "";
+      movieStatus.value = "";
+      editIndex = -1;
+    }
+
+    saveMovieBtn.addEventListener("click", () => {
+      const name = movieName.value.trim();
+      const description = movieDesc.value.trim();
+      const year = parseInt(movieYear.value.trim());
+      const duration = parseInt(movieDuration.value.trim());
+      const genre = movieGenre.value;
+      const status = movieStatus.value;
+
+      if (!name || !year || !duration || !genre || !status) {
+        alert("Vui lòng nhập đầy đủ thông tin!");
+        return;
+      }
+
+      const movie = { name, description, year, duration, genre, status };
+
+      if (editIndex === -1) {
+        movies.push(movie);
+      } else {
+        movies[editIndex] = movie;
+      }
+
+      renderMovies();
+      addMovieModal.hide();
+      resetForm();
+    });
+
+    function viewMovie(index) {
+      const m = movies[index];
+      viewName.textContent = m.name;
+      viewDesc.textContent = m.description || "Không có";
+      viewYear.textContent = m.year;
+      viewDuration.textContent = m.duration;
+      viewGenre.textContent = m.genre;
+      viewStatus.textContent = m.status;
+      viewMovieModal.show();
+    }
+
+    function editMovie(index) {
+      const m = movies[index];
+      modalTitle.textContent = "Chỉnh sửa phim";
+      movieName.value = m.name;
+      movieDesc.value = m.description;
+      movieYear.value = m.year;
+      movieDuration.value = m.duration;
+      movieGenre.value = m.genre;
+      movieStatus.value = m.status;
+      editIndex = index;
+      addMovieModal.show();
+    }
+
+    function deleteMovie(index) {
+      if (confirm("Bạn có chắc chắn muốn xóa phim này không?")) {
+        movies.splice(index, 1);
+        renderMovies();
+      }
+    }
+
+    renderMovies();
+  </script>
 </body>
 </html>
