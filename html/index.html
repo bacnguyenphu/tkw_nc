@@ -34,7 +34,7 @@
                     <span class=""><i class="fa-solid fa-puzzle-piece mt-1" style="font-size: 20px;"></i></span>
                     <span class="fs-6">Quản lí thể loại</span>
                 </div>
-                
+
                 <div class="item_sidebar d-flex align-items-center gap-3 px-5 py-3"
                     onclick="loadPage('quanLiPhim.html')">
                     <span class=""><i class="fa-solid fa-clapperboard mt-1" style="font-size: 20px;"></i></span>
@@ -55,11 +55,34 @@
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </span>
                 </div>
-                <div class="d-flex gap-2 align-items-center">
-                    <div class="avatar">
-                        <img src="../images/chillGuy.jpg" />
+                <div class="dropdown">
+                    <div class="d-flex align-items-center gap-3 dropdown-toggle"
+                        style="cursor: pointer; padding: 10px 15px;" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="avatar">
+                            <img src="../images/chillGuy.jpg" />
+                        </div>
+                        <span class="fs-4 text-white fw-semibold">Nhóm 8</span>
                     </div>
-                    <span class="fs-5 text-white">Nhóm 8</span>
+                    <ul class="dropdown-menu dropdown-menu-end shadow p-3" style="min-width: 220px; font-size: 1.1rem;">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-3" href="#">
+                                <i class="fa-solid fa-user fa-lg" style="width: 25px;"></i> Thông tin tài khoản
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-3" href="#">
+                                <i class="fa-solid fa-key fa-lg" style="width: 25px;"></i> Đổi mật khẩu
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-3 text-danger" href="#">
+                                <i class="fa-solid fa-right-from-bracket fa-lg" style="width: 25px;"></i> Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
                 </div>
 
             </div>
@@ -68,6 +91,7 @@
             </div>
         </div>
     </div>
+    <script src="../bootstrap-5.3.6-dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function loadPage(page) {
             const contentDiv = document.querySelector('.content');
@@ -75,7 +99,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            loadPage('quanLiBinhLuan.html');  // load trang mặc định lúc đầu
+            loadPage('thongke.html');  // load trang mặc định lúc đầu
         });
     </script>
 
